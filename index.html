@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Fullscreen Video</title>
+  <title>Video and Page Playlist</title>
   <style>
     body {
       margin: 0;
@@ -14,7 +14,7 @@
       justify-content: center;
       align-items: center;
     }
-    video {
+    video, iframe {
       position: absolute;
       top: 50%;
       left: 50%;
@@ -23,12 +23,39 @@
       height: 100vh;
       object-fit: cover;
     }
+    iframe {
+      display: none;
+      transform: translate(-50%, -50%) scale(0.75); /* Zoom out by 25% */
+    }
   </style>
 </head>
 <body>
-  <video autoplay loop muted>
-    <source src="Xmas_NetworkRailPORT" type="video/mp4">
+  <video id="video" autoplay muted>
+    <source src="xmas24_networkRail_Port.mp4" type="video/mp4">
     Your browser does not support the video tag.
   </video>
+  <iframe id="webpage" src="https://now.tfl.gov.uk/"></iframe>
+
+  <script>
+    const video = document.getElementById('video');
+    const webpage = document.getElementById('webpage');
+    const webPageDuration = 10000; // 10 seconds in milliseconds
+
+    // Event listener to handle the end of the video
+    video.addEventListener('ended', () => {
+      // Hide the video and show the webpage
+      video.style.display = 'none';
+      webpage.style.display = 'block';
+
+      // Show the webpage for a set duration
+      setTimeout(() => {
+        // Hide the webpage and restart the playlist
+        webpage.style.display = 'none';
+        video.style.display = 'block';
+        video.currentTime = 0; // Reset video to start
+        video.play();
+      }, webPageDuration);
+    });
+  </script>
 </body>
 </html>
