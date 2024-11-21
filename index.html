@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Fullscreen Video</title>
+  <title>Fullscreen Video Loop</title>
   <style>
     body {
       margin: 0;
@@ -26,9 +26,29 @@
   </style>
 </head>
 <body>
-  <video autoplay loop muted>
-    <source src="xmas24_networkRail_Port.mp4" type="video/mp4">
-    Your browser does not support the video tag.
-  </video>
+  <video id="video-player" muted></video>
+
+  <script>
+    const videoPlayer = document.getElementById('video-player');
+
+    // List of video sources
+    const videos = [
+      "xmas24_networkRail_Port.mp4",
+      "LNR_Dec_Table_Feedback.mp4"
+    ];
+
+    let currentVideoIndex = 0;
+
+    // Function to play the next video in the sequence
+    function playNextVideo() {
+      videoPlayer.src = videos[currentVideoIndex];
+      videoPlayer.play();
+      currentVideoIndex = (currentVideoIndex + 1) % videos.length; // Loop back to the first video
+    }
+
+    // Set up the initial video and event listener
+    videoPlayer.addEventListener('ended', playNextVideo);
+    playNextVideo(); // Start playing the first video
+  </script>
 </body>
 </html>
