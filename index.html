@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Fullscreen Video Loop</title>
+  <title>Fullscreen Media Loop</title>
   <style>
     body {
       margin: 0;
@@ -14,7 +14,8 @@
       justify-content: center;
       align-items: center;
     }
-    video {
+
+    video, img {
       position: absolute;
       top: 50%;
       left: 50%;
@@ -23,32 +24,60 @@
       height: 100vh;
       object-fit: cover;
     }
+
+    img {
+      display: none; /* Hidden initially */
+    }
   </style>
 </head>
 <body>
   <video id="video-player" muted></video>
+  <img id="image-player" alt="Display Image">
 
   <script>
     const videoPlayer = document.getElementById('video-player');
+    const imagePlayer = document.getElementById('image-player');
 
-    // List of video sources
-    const videos = [
-      "xmas24_networkRail_Port.mp4",
-      "LNR_Dec_Table_Feedback.mp4"
+    // List of media items (videos and images)
+    const media = [
+      { type: "video", src: "xmas24_networkRail_Port.mp4" },
+      { type: "video", src: "LNR_Dec_Table_Feedback.mp4" },
+      { type: "image", src: "NR_XMAS23_TVM screen_1080_1920.jpg" }
     ];
 
-    let currentVideoIndex = 0;
+    let currentMediaIndex = 0;
 
-    // Function to play the next video in the sequence
-    function playNextVideo() {
-      videoPlayer.src = videos[currentVideoIndex];
-      videoPlayer.play();
-      currentVideoIndex = (currentVideoIndex + 1) % videos.length; // Loop back to the first video
+    function playNextMedia() {
+      const currentMedia = media[currentMediaIndex];
+
+      if (currentMedia.type === "video") {
+        // Play video
+        imagePlayer.style.display = "none";
+        videoPlayer.style.display = "block";
+        videoPlayer.src = currentMedia.src;
+        videoPlayer.play();
+
+        // Move to the next media after the video ends
+        videoPlayer.onended = () => {
+          currentMediaIndex = (currentMediaIndex + 1) % media.length;
+          playNextMedia();
+        };
+      } else if (currentMedia.type === "image") {
+        // Show image
+        videoPlayer.style.display = "none";
+        imagePlayer.style.display = "block";
+        imagePlayer.src = currentMedia.src;
+
+        // Move to the next media after 10 seconds
+        setTimeout(() => {
+          currentMediaIndex = (currentMediaIndex + 1) % media.length;
+          playNextMedia();
+        }, 10000); // Display for 10 seconds
+      }
     }
 
-    // Set up the initial video and event listener
-    videoPlayer.addEventListener('ended', playNextVideo);
-    playNextVideo(); // Start playing the first video
+    // Start playing the first media
+    playNextMedia();
   </script>
 </body>
 </html>
