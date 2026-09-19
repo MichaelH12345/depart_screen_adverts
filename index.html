@@ -22,7 +22,7 @@
       transform: translate(-50%, -50%);
       width: 100vw;
       height: 100vh;
-      object-fit: cover;
+      object-fit: fill;
     }
 
     img {
@@ -41,8 +41,12 @@
     // List of media items (videos and images)
     const media = [
       { type: "image", src: "uselift_dual.png" },
+      { type: "video", src: "TfL_Go_QuieterTimes.mp4" },
+      { type: "video", src: "TfL_Dual.mp4" },
+      { type: "video", src: "NR_NowTalking_Static.mp4" },
     ];
 
+    
     let currentMediaIndex = 0;
 
     function playNextMedia() {
